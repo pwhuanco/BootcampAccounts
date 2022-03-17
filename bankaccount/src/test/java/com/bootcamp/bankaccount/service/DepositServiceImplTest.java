@@ -51,7 +51,7 @@ class DepositServiceImplTest {
     void saveAccount() {
 //        Mockito.when(depositRepository.save(ArgumentMatchers.any(depositDtoMono.getClass()))).thenReturn();
 
-        Assertions.assertNotNull(service.saveAccount(account));
+        Assertions.assertNotNull(service.saveAccount(accountDto));
         //Mockito.verify(depositRepository, Mockito.times(1)).save(ArgumentMatchers.any(depositDtoMono.getClass())));
     }
 }

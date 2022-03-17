@@ -11,15 +11,15 @@ public interface AccountService {
     Mono<AccountDto> getAccountById(String id);
 
 
-    Mono<Account> saveAccount(Account accountDtoMono);
+    Mono<AccountDto> saveAccount(AccountDto accountDtoMono);
 
     Mono<AccountDto> updateAccount(Mono<AccountDto> accountDtoMono,String id);
 
     Mono<Void> deleteAccount(String id);
 
-    Mono<Account> validateClientIdNumber(String clientIdNumber);
+    Flux<Account> validateClientIdNumber(String clientIdNumber);
 
-    Mono<Account> findByClientIdNumber(String clientIdNumber);
+    Flux<Account> findByClientIdNumber(String clientIdNumber);
 
     Mono<Account> findByAccountNumber(String accountNumber);
 }

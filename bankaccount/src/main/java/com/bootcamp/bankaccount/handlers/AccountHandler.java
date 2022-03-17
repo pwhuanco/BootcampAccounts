@@ -35,7 +35,7 @@ public class AccountHandler {
     }
 
     public Mono<ServerResponse> newSavingAccount(ServerRequest request){
-        Mono<Account> accountMono = request.bodyToMono(Account.class);
+        Mono<AccountDto> accountMono = request.bodyToMono(AccountDto.class);
         return accountMono
                 .flatMap(accountCreate -> clientService.getClient(accountCreate.getClientIdNumber())
                         .flatMap(customer->{

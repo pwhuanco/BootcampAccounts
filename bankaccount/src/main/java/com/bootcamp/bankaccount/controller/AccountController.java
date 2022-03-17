@@ -35,11 +35,12 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
-    /*@PostMapping()
-    public Mono<AccountDto> saveAccount(@RequestBody Mono<AccountDto> accountDtoMono){
+    @PostMapping()
+    public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono){
         LOGGER.debug("Saving clients!");
         return accountService.saveAccount(accountDtoMono);
-    }*/
+
+    }
 
     @PutMapping("/{id}")
     public Mono<AccountDto> updateAccount(@RequestBody Mono<AccountDto> accountDtoMono,@PathVariable String id){

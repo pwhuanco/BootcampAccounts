@@ -34,8 +34,9 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAll().map(AppUtils::entityToDto);
     }
 
-    @Value("${microservice-accounts.uri}")
-    private String urlAccounts;
+
+    @Value("${microservice-clients.uri}")
+    private String urlClients;
     @Value("${apiclient.uri}")
     private String urlApigateway;
 
@@ -44,12 +45,16 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findById(id).map(AppUtils::entityToDto);
     }
 
-    public Mono<Account> saveAccount(Account accountDtoMono) {
-        ClientDto client = obtainClient(accountDtoMono.getClientIdNumber());
-        obtainAccountsClient();
-        return accountRepository.save(accountDtoMono);
+    public Mono<AccountDto> saveAccount(AccountDto accountDto) {
+        ClientDto client = obtainClient(accountDto.getClientIdNumber());
+        //obtainAccountsClient();
+        //return accountRepository.save(accountDto);
+
+        return Mono.just(accountDto).map(AppUtils::dtoToEntity)
+                .flatMap(accountRepository::insert)
+                .map(AppUtils::entityToDto);
     }
-    private AccountDto obtainAccountsClient(Account account, ClientDto client) {
+    /*private AccountDto obtainAccountsClient(Account account, ClientDto client) {
         Flux<Account> acc = accountRepository.findByClientIdNumber(account.getClientIdNumber());
         int countAccountS = 0;
         int countAccountC = 0;
@@ -70,9 +75,9 @@ public class AccountServiceImpl implements AccountService {
 
         }
         return null;
-    }
+    }*/
     private ClientDto obtainClient(String clientId) {
-        ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlAccounts + clientId, ClientDto.class);
+        ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients +"findClientCredit/"+ clientId, ClientDto.class);
         LOGGER.debug("clientDto:" + clientDto.getClientNumber());
         return clientDto;
     }
@@ -90,14 +95,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Mono<Account> validateClientIdNumber(String customerIdentityNumber) {
+    public Flux<Account> validateClientIdNumber(String customerIdentityNumber) {
         return accountRepository.findByClientIdNumber(customerIdentityNumber)
                 .switchIfEmpty(Mono.just(Account.builder()
                         .clientIdNumber(null).build()));
     }
 
     @Override
-    public Mono<Account> findByClientIdNumber(String clientIdNumber) {
+    public Flux<Account> findByClientIdNumber(String clientIdNumber) {
         return accountRepository.findByClientIdNumber(clientIdNumber);
     }
 
