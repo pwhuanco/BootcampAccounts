@@ -15,16 +15,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 
 public class Client {
-	@Id
-	private String id;
-	private String name;
+    @Id
+    private String id;
+    private String name;
 
-	private String clientIdType;
+    private String clientIdType;
 
-	private String clientIdNumber;
+    private String clientIdNumber;
 
-	private String email;
-	private String phone;
-	private String address;
+    private String email;
+    private String phone;
+    private String address;
 
 }

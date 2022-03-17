@@ -17,20 +17,21 @@ import static com.bootcamp.bankaccount.util.Constants.API_CLIENT_URL;
 @SpringBootApplication
 public class BankAccountApplication {
 
-	@Bean
-	public WebClient webClient(WebClient.Builder builder){
-		return builder
-				.baseUrl(API_CLIENT_URL)
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.build();
-	}
-	@Bean
-	public RestTemplate restTemplate(){
-		return new RestTemplate();
-	}
+    @Bean
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder
+                .baseUrl(API_CLIENT_URL)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(BankAccountApplication.class, args);
-	}
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(BankAccountApplication.class, args);
+    }
 
 }

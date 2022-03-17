@@ -10,28 +10,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class AccountDto {
-	private String id;
+    private String id;
 
-	private String accountNumber;
+    private String accountNumber;
 
-	private double balance;
+    private double balance;
 
-	private String currency;
+    private String currency;
 
-	private String accountType;
+    private String accountType;
 
-	private String canBeDeposit;
+    private String canBeDeposit;
 
-	private LocalDateTime operationDate = LocalDateTime.now();
+    private LocalDateTime operationDate = LocalDateTime.now();
 
-	private ClientCommand client;
+    private ClientCommand client;
 
-	private int movementPerMonth;
+    private int movementPerMonth;
 
-	private int maxLimitMovementPerMonth;
+    private int maxLimitMovementPerMonth;
 
-	private String clientIdNumber;
-
+    private String clientIdNumber;
 
 
 }

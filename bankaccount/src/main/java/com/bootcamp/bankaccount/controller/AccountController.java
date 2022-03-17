@@ -22,34 +22,33 @@ public class AccountController {
 
 
     @GetMapping
-    public Flux<AccountDto> getAccount(){
-        //log.debug("valor:{0}","ddddd");
+    public Flux<AccountDto> getAccount() {
         LOGGER.debug("Getting Accounts!");
 
         return accountService.getAccounts();
     }
 
     @GetMapping("/{id}")
-    public Mono<AccountDto> getAccount(@PathVariable String id){
+    public Mono<AccountDto> getAccount(@PathVariable String id) {
         LOGGER.debug("Getting a accounts!");
         return accountService.getAccountById(id);
     }
 
     @PostMapping()
-    public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono){
+    public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono) {
         LOGGER.debug("Saving clients!");
         return accountService.saveAccount(accountDtoMono);
 
     }
 
     @PutMapping("/{id}")
-    public Mono<AccountDto> updateAccount(@RequestBody Mono<AccountDto> accountDtoMono,@PathVariable String id){
+    public Mono<AccountDto> updateAccount(@RequestBody Mono<AccountDto> accountDtoMono, @PathVariable String id) {
         LOGGER.debug("Updating accounts!");
-        return accountService.updateAccount(accountDtoMono,id);
+        return accountService.updateAccount(accountDtoMono, id);
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> deleteAccount(@PathVariable String id){
+    public Mono<Void> deleteAccount(@PathVariable String id) {
         LOGGER.debug("Deleting accounts!");
         return accountService.deleteAccount(id);
     }

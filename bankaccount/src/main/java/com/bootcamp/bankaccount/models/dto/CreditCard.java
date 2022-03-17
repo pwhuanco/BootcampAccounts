@@ -14,5 +14,5 @@ public class CreditCard {
 
     private ClientCommand client;
 
-    private boolean debitor ;
+    private boolean debitor;
 }

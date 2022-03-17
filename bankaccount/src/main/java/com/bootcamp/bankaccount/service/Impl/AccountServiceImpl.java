@@ -1,14 +1,11 @@
 package com.bootcamp.bankaccount.service.Impl;
 
-import com.bootcamp.bankaccount.controller.AccountController;
 import com.bootcamp.bankaccount.models.bean.Account;
-import com.bootcamp.bankaccount.models.bean.Client;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
 import com.bootcamp.bankaccount.repository.AccountRepository;
 import com.bootcamp.bankaccount.service.AccountService;
 import com.bootcamp.bankaccount.util.AppUtils;
-import com.bootcamp.bankaccount.util.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -17,11 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-@AllArgsConstructor @NoArgsConstructor @Builder
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Service
 public class AccountServiceImpl implements AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
@@ -30,6 +29,7 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private RestTemplate restTemplate;
+
     public Flux<AccountDto> getAccounts() {
         return accountRepository.findAll().map(AppUtils::entityToDto);
     }
@@ -54,6 +54,7 @@ public class AccountServiceImpl implements AccountService {
                 .flatMap(accountRepository::insert)
                 .map(AppUtils::entityToDto);
     }
+
     /*private AccountDto obtainAccountsClient(Account account, ClientDto client) {
         Flux<Account> acc = accountRepository.findByClientIdNumber(account.getClientIdNumber());
         int countAccountS = 0;
@@ -77,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
         return null;
     }*/
     private ClientDto obtainClient(String clientId) {
-        ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients +"findClientCredit/"+ clientId, ClientDto.class);
+        ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients + "findClientCredit/" + clientId, ClientDto.class);
         LOGGER.debug("clientDto:" + clientDto.getClientNumber());
         return clientDto;
     }

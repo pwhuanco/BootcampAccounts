@@ -1,6 +1,5 @@
 package com.bootcamp.bankaccount.handlers;
 
-import com.bootcamp.bankaccount.models.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.bootcamp.bankaccount.service.AccountService;
@@ -19,7 +18,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class AccountHandler {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(AccountHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountHandler.class);
     @Autowired
     private AccountService accountService;
 
@@ -29,26 +28,26 @@ public class AccountHandler {
     @Autowired
     private ClientService clientService;
 
-    public Mono<ServerResponse> findAll(ServerRequest request){
+    public Mono<ServerResponse> findAll(ServerRequest request) {
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(accountService.getAccounts(), AccountDto.class);
     }
 
-    public Mono<ServerResponse> newSavingAccount(ServerRequest request){
+    public Mono<ServerResponse> newSavingAccount(ServerRequest request) {
         Mono<AccountDto> accountMono = request.bodyToMono(AccountDto.class);
         return accountMono
                 .flatMap(accountCreate -> clientService.getClient(accountCreate.getClientIdNumber())
-                        .flatMap(customer->{
+                        .flatMap(customer -> {
                             accountCreate.setClient(ClientCommand.builder()
                                     .name(customer.getName()).code(customer.getClientType().getCode())
                                     .clientIdNumber(customer.getClientIdNumber()).build());
                             accountCreate.setAccountType("SAVING_ACCOUNT");
                             accountCreate.setMaxLimitMovementPerMonth(accountCreate.getMaxLimitMovementPerMonth());
                             accountCreate.setMovementPerMonth(0);
-                            return  accountService.saveAccount(accountCreate);
+                            return accountService.saveAccount(accountCreate);
                         })
                 )
-                .flatMap( c -> ServerResponse
+                .flatMap(c -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromValue(c))
@@ -56,7 +55,7 @@ public class AccountHandler {
     }
 
 
-    public Mono<ServerResponse> deleteSavingAccount(ServerRequest request){
+    public Mono<ServerResponse> deleteSavingAccount(ServerRequest request) {
 
         String id = request.pathVariable("id");
 

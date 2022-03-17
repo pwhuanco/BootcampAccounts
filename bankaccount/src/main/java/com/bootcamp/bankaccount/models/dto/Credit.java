@@ -15,5 +15,5 @@ public class Credit {
 
     private ClientCommand client;
 
-    private boolean debitor ;
+    private boolean debitor;
 }
