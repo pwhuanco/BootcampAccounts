@@ -16,15 +16,14 @@ import reactor.core.publisher.Mono;
 @RequestMapping(path = "/api/accounts")
 public class AccountController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
-    @Value("${spring.application.name}")
-    private String appName;
+
     @Autowired
     private AccountService accountService;
 
+    @CircuitBreaker(name = "getAccountCB", fallbackMethod = "fallbackGetAccount")
     @GetMapping
     public Flux<AccountDto> getAccount() {
         LOGGER.debug("Getting Accounts!");
-
         return accountService.getAccounts();
     }
 
@@ -56,6 +55,10 @@ public class AccountController {
 
     private Mono<AccountDto> fallbackSaveAccount(AccountDto accountDto, RuntimeException re ) {
         LOGGER.debug("Respondiendo con fallbackSaveAccount");
+        return Mono.just(new AccountDto());
+    }
+    private Mono<AccountDto> fallbackGetAccount(AccountDto accountDto, RuntimeException re ) {
+        LOGGER.debug("Respondiendo con fallbackGetAccount");
         return Mono.just(new AccountDto());
     }
 

@@ -31,7 +31,6 @@ public class CreditServiceImpl implements CreditService {
                 .build();
     }
 
-
     @Override
     public Flux<Credit> getCredit(String clientIdNumber) {
         Map<String, Object> params = new HashMap<String, Object>();
@@ -46,6 +45,5 @@ public class CreditServiceImpl implements CreditService {
                 .doOnNext(c -> LOGGER.info("Credit REsponse : Contract= {}", c.getContractNumber()));
 
     }
-
 
 }
