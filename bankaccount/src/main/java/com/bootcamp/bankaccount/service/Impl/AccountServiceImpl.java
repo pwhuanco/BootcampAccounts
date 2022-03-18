@@ -30,29 +30,42 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public Flux<AccountDto> getAccounts() {
-        return accountRepository.findAll().map(AppUtils::entityToDto);
-    }
-
-
     @Value("${microservice-clients.uri}")
     private String urlClients;
     @Value("${apiclient.uri}")
     private String urlApigateway;
+
+    public Flux<AccountDto> getAccounts() {
+        return accountRepository.findAll().map(AppUtils::entityToDto);
+    }
 
     @Override
     public Mono<AccountDto> getAccountById(String id) {
         return accountRepository.findById(id).map(AppUtils::entityToDto);
     }
 
+    @Override
     public Mono<AccountDto> saveAccount(AccountDto accountDto) {
-        ClientDto client = obtainClient(accountDto.getClientIdNumber());
+/*        Optional<ClientDto> clientOp = Optional.ofNullable(
+                breakerFactory.create("getForObject")
+                .run(() -> obtainClient(accountDto.getClientIdNumber()),
+                     t -> null   )
+        );
+        LOGGER.debug(clientOp.isEmpty()+","+clientOp.isPresent()+":"+clientOp);
         //obtainAccountsClient();
         //return accountRepository.save(accountDto);
+        return clientOp.map(c-> {
+            return Mono.just(accountDto).map(AppUtils::dtoToEntity)
+                    .flatMap(accountRepository::insert)
+                    .map(AppUtils::entityToDto);
+        }).orElse(Mono.just(new AccountDto()));
+*/
 
+        ClientDto dto = obtainClient(accountDto.getClientIdNumber());
         return Mono.just(accountDto).map(AppUtils::dtoToEntity)
                 .flatMap(accountRepository::insert)
                 .map(AppUtils::entityToDto);
+
     }
 
     /*private AccountDto obtainAccountsClient(Account account, ClientDto client) {
@@ -79,10 +92,12 @@ public class AccountServiceImpl implements AccountService {
     }*/
     private ClientDto obtainClient(String clientId) {
         ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients + "findClientCredit/" + clientId, ClientDto.class);
+
         LOGGER.debug("clientDto:" + clientDto.getClientNumber());
         return clientDto;
     }
 
+    @Override
     public Mono<AccountDto> updateAccount(Mono<AccountDto> AccountDtoMono, String id) {
         return accountRepository.findById(id)
                 .flatMap(p -> AccountDtoMono.map(AppUtils::dtoToEntity)

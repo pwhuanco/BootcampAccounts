@@ -2,6 +2,7 @@ package com.bootcamp.bankaccount.controller;
 
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.service.AccountService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-
     @GetMapping
     public Flux<AccountDto> getAccount() {
         LOGGER.debug("Getting Accounts!");
@@ -30,13 +30,14 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public Mono<AccountDto> getAccount(@PathVariable String id) {
-        LOGGER.debug("Getting a accounts!");
+        LOGGER.debug("Getting a account!");
         return accountService.getAccountById(id);
     }
 
+    @CircuitBreaker(name = "saveAccountCB", fallbackMethod = "fallbackSaveAccount")
     @PostMapping()
     public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono) {
-        LOGGER.debug("Saving clients!");
+        LOGGER.debug("Saving accounts!");
         return accountService.saveAccount(accountDtoMono);
 
     }
@@ -51,6 +52,11 @@ public class AccountController {
     public Mono<Void> deleteAccount(@PathVariable String id) {
         LOGGER.debug("Deleting accounts!");
         return accountService.deleteAccount(id);
+    }
+
+    private Mono<AccountDto> fallbackSaveAccount(AccountDto accountDto, RuntimeException re ) {
+        LOGGER.debug("Respondiendo con fallbackSaveAccount");
+        return Mono.just(new AccountDto());
     }
 
 }
