@@ -93,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
     private ClientDto obtainClient(String clientId) {
         ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients + "findClientCredit/" + clientId, ClientDto.class);
 
-        LOGGER.debug("clientDto:" + clientDto.getClientNumber());
+        LOGGER.debug("clientDto:" + clientDto.getClientIdNumber());
         return clientDto;
     }
 

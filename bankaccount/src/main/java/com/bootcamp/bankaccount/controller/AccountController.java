@@ -3,10 +3,10 @@ package com.bootcamp.bankaccount.controller;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.service.AccountService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,6 +21,7 @@ public class AccountController {
     private AccountService accountService;
 
     @CircuitBreaker(name = "getAccountCB", fallbackMethod = "fallbackGetAccount")
+    @TimeLimiter(name = "getAccountCB")
     @GetMapping
     public Flux<AccountDto> getAccount() {
         LOGGER.debug("Getting Accounts!");
@@ -34,6 +35,7 @@ public class AccountController {
     }
 
     @CircuitBreaker(name = "saveAccountCB", fallbackMethod = "fallbackSaveAccount")
+    @TimeLimiter(name = "saveAccountCB")
     @PostMapping()
     public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono) {
         LOGGER.debug("Saving accounts!");
@@ -57,9 +59,14 @@ public class AccountController {
         LOGGER.debug("Respondiendo con fallbackSaveAccount");
         return Mono.just(new AccountDto());
     }
-    private Mono<AccountDto> fallbackGetAccount(AccountDto accountDto, RuntimeException re ) {
+
+    private Flux<AccountDto> fallbackGetAccount(RuntimeException re ) {
         LOGGER.debug("Respondiendo con fallbackGetAccount");
-        return Mono.just(new AccountDto());
+        return Flux.just(new AccountDto());
+    }
+    private Flux<AccountDto> fallbackGetAccountTime(RuntimeException re ) {
+        LOGGER.debug("Respondiendo con fallbackGetAccountTime");
+        return Flux.just(new AccountDto());
     }
 
 }

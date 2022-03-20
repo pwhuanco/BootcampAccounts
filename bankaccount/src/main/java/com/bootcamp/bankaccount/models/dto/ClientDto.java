@@ -13,7 +13,7 @@ public class ClientDto {
     private String id;
     private String name;
 
-    private String clientNumber;
+    private String clientIdNumber;
 
     private String email;
     private String phone;
