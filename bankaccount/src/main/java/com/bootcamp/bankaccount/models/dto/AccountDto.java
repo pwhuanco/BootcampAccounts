@@ -32,5 +32,7 @@ public class AccountDto {
 
     private String clientIdNumber;
 
+    private Double minimumOpeningAmount;
+
 
 }

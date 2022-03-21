@@ -43,4 +43,8 @@ public class Account {
 
     private String clientIdNumber;
 
+    private Double minimumOpeningAmount;
+
+
+
 }
