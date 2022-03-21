@@ -4,6 +4,7 @@ import com.bootcamp.bankaccount.models.bean.Account;
 import com.bootcamp.bankaccount.models.bean.Client;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
+import com.bootcamp.bankaccount.models.dto.CreditCardDto;
 import com.bootcamp.bankaccount.repository.AccountRepository;
 import com.bootcamp.bankaccount.service.AccountService;
 import com.bootcamp.bankaccount.util.AppUtils;
@@ -33,6 +34,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Value("${microservice-clients.uri}")
     private String urlClients;
+
+    @Value("${microservice-creditcard.uri}")
+    private String urlCreditCard;
+
     @Value("${apiclient.uri}")
     private String urlApigateway;
 
@@ -60,16 +65,40 @@ public class AccountServiceImpl implements AccountService {
                     .flatMap(accountRepository::insert)
                     .map(AppUtils::entityToDto);
         }).orElse(Mono.just(new AccountDto()));
+
+
 */
-        if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
-            ClientDto dto = obtainClient(accountDto.getClientIdNumber());
-            return Mono.just(accountDto).map(AppUtils::dtoToEntity)
-                    .flatMap(accountRepository::insert)
-                    .map(AppUtils::entityToDto);
+        if(accountDto.getAccountType()=="VIP"||accountDto.getAccountType()=="PYME"){
+            CreditCardDto haveCreditCard = restTemplate.getForObject(urlApigateway + urlCreditCard + accountDto.getAccountType(), CreditCardDto.class);
+            if(haveCreditCard!=null){
+                if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
+                    ClientDto dto = obtainClient(accountDto.getClientIdNumber());
+                    return Mono.just(accountDto).map(AppUtils::dtoToEntity)
+                            .flatMap(accountRepository::insert)
+                            .map(AppUtils::entityToDto);
+                }
+                else{
+                    LOGGER.debug("Cliente no se registró porque el monto inicial no es mayor a el mínimo de apertura");
+                    return null;
+                }
+            }
+            else{
+                LOGGER.debug("Cliente no se registró porque según el tipo de producto requiere tener una tarjeta de crédito");
+                return null;
+            }
+
         }
         else{
-            LOGGER.debug("CLiente no se registró porque el monto inicial no es mayor a el mínimo de apertura");
-            return null;
+            if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
+                ClientDto dto = obtainClient(accountDto.getClientIdNumber());
+                return Mono.just(accountDto).map(AppUtils::dtoToEntity)
+                        .flatMap(accountRepository::insert)
+                        .map(AppUtils::entityToDto);
+            }
+            else{
+                LOGGER.debug("CLiente no se registró porque el monto inicial no es mayor a el mínimo de apertura");
+                return null;
+            }
         }
 
 

@@ -45,6 +45,11 @@ public class Account {
 
     private Double minimumOpeningAmount;
 
+    private Double minimumDailyAverageAmountEachMonth;
+
+    private int maxLimitTransaction;
+
+
 
 
 }

@@ -34,5 +34,10 @@ public class AccountDto {
 
     private Double minimumOpeningAmount;
 
+    private Double minimumDailyAverageAmountEachMonth;
+
+    private int maxLimitTransaction;
+
+
 
 }
