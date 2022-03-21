@@ -1,6 +1,7 @@
 package com.bootcamp.bankaccount.service.Impl;
 
 import com.bootcamp.bankaccount.models.bean.Account;
+import com.bootcamp.bankaccount.models.bean.Client;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
 import com.bootcamp.bankaccount.repository.AccountRepository;
@@ -60,11 +61,18 @@ public class AccountServiceImpl implements AccountService {
                     .map(AppUtils::entityToDto);
         }).orElse(Mono.just(new AccountDto()));
 */
+        if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
+            ClientDto dto = obtainClient(accountDto.getClientIdNumber());
+            return Mono.just(accountDto).map(AppUtils::dtoToEntity)
+                    .flatMap(accountRepository::insert)
+                    .map(AppUtils::entityToDto);
+        }
+        else{
+            LOGGER.debug("CLiente no se registró porque el monto inicial no es mayor a el mínimo de apertura");
+            return null;
+        }
 
-        ClientDto dto = obtainClient(accountDto.getClientIdNumber());
-        return Mono.just(accountDto).map(AppUtils::dtoToEntity)
-                .flatMap(accountRepository::insert)
-                .map(AppUtils::entityToDto);
+
 
     }
 
