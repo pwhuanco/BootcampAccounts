@@ -52,22 +52,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<AccountDto> saveAccount(AccountDto accountDto) {
-/*        Optional<ClientDto> clientOp = Optional.ofNullable(
-                breakerFactory.create("getForObject")
-                .run(() -> obtainClient(accountDto.getClientIdNumber()),
-                     t -> null   )
-        );
-        LOGGER.debug(clientOp.isEmpty()+","+clientOp.isPresent()+":"+clientOp);
-        //obtainAccountsClient();
-        //return accountRepository.save(accountDto);
-        return clientOp.map(c-> {
-            return Mono.just(accountDto).map(AppUtils::dtoToEntity)
-                    .flatMap(accountRepository::insert)
-                    .map(AppUtils::entityToDto);
-        }).orElse(Mono.just(new AccountDto()));
-
-
-*/
         if(accountDto.getAccountType()=="VIP"||accountDto.getAccountType()=="PYME"){
             CreditCardDto haveCreditCard = restTemplate.getForObject(urlApigateway + urlCreditCard + accountDto.getAccountType(), CreditCardDto.class);
             if(haveCreditCard!=null){
@@ -86,7 +70,6 @@ public class AccountServiceImpl implements AccountService {
                 LOGGER.debug("Cliente no se registró porque según el tipo de producto requiere tener una tarjeta de crédito");
                 return null;
             }
-
         }
         else{
             if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
@@ -100,33 +83,8 @@ public class AccountServiceImpl implements AccountService {
                 return null;
             }
         }
-
-
-
     }
 
-    /*private AccountDto obtainAccountsClient(Account account, ClientDto client) {
-        Flux<Account> acc = accountRepository.findByClientIdNumber(account.getClientIdNumber());
-        int countAccountS = 0;
-        int countAccountC = 0;
-        int countAccount = 0;
-
-        acc.flatMap((ac) ->{
-            int rsp = 0;
-                if(Constants.TIPO_CLIENTE_PERSONA.equalsIgnoreCase(client.getClientType().getId())
-                    && Constants.TIPO_CUENTA_AHORRO.equalsIgnoreCase(ac.getAccountType())){
-                    rsp = 1;
-                } else{
-                    rsp = 0;
-                }
-                return null;
-        });
-
-        if(countAccount > 1 && countAccountC > 1){
-
-        }
-        return null;
-    }*/
     private ClientDto obtainClient(String clientId) {
         ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients + "findClientCredit/" + clientId, ClientDto.class);
 
