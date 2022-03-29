@@ -3,11 +3,12 @@ spring:
     name: bankaccounts-microservice
   cloud:
     config:
-      uri: http://localhost:8081
+      uri: https://bootcampconfigserver.azurewebsites.net/
+      #uri: http://localhost:8081
       username: develop
       password: develop
   profiles:
-    active: dev
+    active: test
 #  mvc:
 #    pathmatch:
 #      matching-strategy: ant_path_matcher
