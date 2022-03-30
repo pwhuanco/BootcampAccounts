@@ -4,15 +4,22 @@ import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.service.AccountService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 //@Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "/api/accounts")
 public class AccountController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
@@ -34,7 +41,14 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
-    @CircuitBreaker(name = "saveAccountCB", fallbackMethod = "fallbackSaveAccount")
+    @GetMapping("/findByClientId/{clientId}")
+    public Flux<Account> getAccountByClientId(@PathVariable String clientId) {
+        log.info("Getting a ClientId!");
+        return accountService.getAccountByClientId(clientId);
+    }
+
+    @CircuitBreaker(name = "saveAccountCB",
+            fallbackMethod = "fallbackSaveAccount")
     @TimeLimiter(name = "saveAccountCB")
     @PostMapping()
     public Mono<AccountDto> saveAccount(@RequestBody AccountDto accountDtoMono) {
@@ -44,7 +58,9 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    public Mono<AccountDto> updateAccount(@RequestBody Mono<AccountDto> accountDtoMono, @PathVariable String id) {
+    public Mono<AccountDto> updateAccount(
+            @RequestBody Mono<AccountDto> accountDtoMono,
+            @PathVariable String id) {
         LOGGER.debug("Updating accounts!");
         return accountService.updateAccount(accountDtoMono, id);
     }

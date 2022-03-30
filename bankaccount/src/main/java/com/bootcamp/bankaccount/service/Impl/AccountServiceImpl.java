@@ -1,16 +1,17 @@
 package com.bootcamp.bankaccount.service.Impl;
 
 import com.bootcamp.bankaccount.models.bean.Account;
-import com.bootcamp.bankaccount.models.bean.Client;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
 import com.bootcamp.bankaccount.models.dto.CreditCardDto;
 import com.bootcamp.bankaccount.repository.AccountRepository;
 import com.bootcamp.bankaccount.service.AccountService;
 import com.bootcamp.bankaccount.util.AppUtils;
+import com.bootcamp.bankaccount.util.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,28 +55,29 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Mono<AccountDto> saveAccount(AccountDto accountDto) {
-        if(accountDto.getAccountType()=="VIP"||accountDto.getAccountType()=="PYME"){
-            CreditCardDto haveCreditCard = restTemplate.getForObject(urlApigateway + urlCreditCard + accountDto.getAccountType(), CreditCardDto.class);
-            if(haveCreditCard!=null){
-                if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
-                    ClientDto dto = obtainClient(accountDto.getClientIdNumber());
+        if (StringUtils.equals(accountDto.getAccountType(), Constants.VIP)
+                || StringUtils.equals(accountDto.getAccountType(), Constants.PYME)) {
+            if (!Objects.isNull(restTemplate.getForObject(
+                    urlApigateway + urlCreditCard + accountDto.getAccountType(),
+                    CreditCardDto.class))) {
+                if (accountDto.getBalance() >= accountDto.getMinimumOpeningAmount()) {
                     return Mono.just(accountDto).map(AppUtils::dtoToEntity)
                             .flatMap(accountRepository::insert)
                             .map(AppUtils::entityToDto);
                 }
                 else{
-                    LOGGER.debug("Cliente no se registró porque el monto inicial no es mayor a el mínimo de apertura");
+                    LOGGER.debug(Constants.MSJ_MONTO_MENOR_APERTURA);
                     return null;
                 }
             }
             else{
-                LOGGER.debug("Cliente no se registró porque según el tipo de producto requiere tener una tarjeta de crédito");
+                LOGGER.debug(Constants.MSJ_REQUIERE_TC);
                 return null;
             }
-        }
-        else{
-            if(accountDto.getBalance()>=accountDto.getMinimumOpeningAmount()){
-                ClientDto dto = obtainClient(accountDto.getClientIdNumber());
+
+        } else {
+            // NO ES CUENTA VIP, NO ES CUENTA PYME
+            if (accountDto.getBalance() >= accountDto.getMinimumOpeningAmount()) {
                 return Mono.just(accountDto).map(AppUtils::dtoToEntity)
                         .flatMap(accountRepository::insert)
                         .map(AppUtils::entityToDto);
@@ -86,8 +90,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private ClientDto obtainClient(String clientId) {
-        ClientDto clientDto = restTemplate.getForObject(urlApigateway + urlClients + "findClientCredit/" + clientId, ClientDto.class);
-
+        ClientDto clientDto = restTemplate.getForObject(urlApigateway
+                + urlClients + "findClientCredit/"
+                + clientId, ClientDto.class);
         LOGGER.debug("clientDto:" + clientDto.getClientIdNumber());
         return clientDto;
     }
@@ -120,5 +125,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Mono<Account> findByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber);
+    }
+
+    @Override
+    public Flux<Account> getAccountByClientId(String clientIdNumber) {
+        return accountRepository.findByClientIdNumber(clientIdNumber);
     }
 }

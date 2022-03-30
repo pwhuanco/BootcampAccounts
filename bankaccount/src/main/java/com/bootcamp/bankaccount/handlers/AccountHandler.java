@@ -34,14 +34,13 @@ public class AccountHandler {
     }
 
     public Mono<ServerResponse> newSavingAccount(ServerRequest request) {
-        Mono<AccountDto> accountMono = request.bodyToMono(AccountDto.class);
-        return accountMono
+        return request.bodyToMono(AccountDto.class)
                 .flatMap(accountCreate -> clientService.getClient(accountCreate.getClientIdNumber())
                         .flatMap(customer -> {
                             accountCreate.setClient(ClientCommand.builder()
                                     .name(customer.getName()).code(customer.getClientType().getCode())
                                     .clientIdNumber(customer.getClientIdNumber()).build());
-                            accountCreate.setAccountType("SAVING_ACCOUNT");
+                            accountCreate.setAccountType(Constants.SAVING_ACCOUNT);
                             accountCreate.setMaxLimitMovementPerMonth(accountCreate.getMaxLimitMovementPerMonth());
                             accountCreate.setMovementPerMonth(0);
                             return accountService.saveAccount(accountCreate);
@@ -58,11 +57,11 @@ public class AccountHandler {
     public Mono<ServerResponse> deleteSavingAccount(ServerRequest request) {
 
         String id = request.pathVariable("id");
-
-        Mono<AccountDto> accountMono = accountService.getAccountById(id);
-        return accountMono
-                .doOnNext(c -> LOGGER.info("deleteConsumption: consumptonId={}", c.getId()))
-                .flatMap(c -> accountService.deleteAccount(id).then(ServerResponse.noContent().build()))
+        return accountService.getAccountById(id)
+                .doOnNext(c -> log.info("deleteConsumption: consumptonId={}",
+                        c.getId()))
+                .flatMap(c -> accountService.deleteAccount(id)
+                        .then(ServerResponse.noContent().build()))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 }

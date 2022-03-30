@@ -22,4 +22,6 @@ public interface AccountService {
     Flux<Account> findByClientIdNumber(String clientIdNumber);
 
     Mono<Account> findByAccountNumber(String accountNumber);
+
+    Flux<Account> getAccountByClientId(String clientId);
 }
