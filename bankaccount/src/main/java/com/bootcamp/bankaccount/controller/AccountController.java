@@ -1,11 +1,15 @@
 package com.bootcamp.bankaccount.controller;
 
+import com.bootcamp.bankaccount.models.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.service.AccountService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +47,7 @@ public class AccountController {
 
     @GetMapping("/findByClientId/{clientId}")
     public Flux<Account> getAccountByClientId(@PathVariable String clientId) {
-        log.info("Getting a ClientId!");
+        LOGGER.info("Getting a ClientId!");
         return accountService.getAccountByClientId(clientId);
     }
 
