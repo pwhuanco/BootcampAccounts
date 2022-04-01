@@ -5,6 +5,7 @@ import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.bootcamp.bankaccount.service.AccountService;
 import com.bootcamp.bankaccount.service.ClientService;
 import com.bootcamp.bankaccount.service.CreditService;
+import com.bootcamp.bankaccount.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class AccountHandler {
 
         String id = request.pathVariable("id");
         return accountService.getAccountById(id)
-                .doOnNext(c -> log.info("deleteConsumption: consumptonId={}",
+                .doOnNext(c -> LOGGER.info("deleteConsumption: consumptonId={}",
                         c.getId()))
                 .flatMap(c -> accountService.deleteAccount(id)
                         .then(ServerResponse.noContent().build()))
