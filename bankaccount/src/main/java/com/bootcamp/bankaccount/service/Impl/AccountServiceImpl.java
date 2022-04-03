@@ -139,4 +139,9 @@ public class AccountServiceImpl implements AccountService {
     public Flux<Account> getAccountByClientId(String clientIdNumber) {
         return accountRepository.findByClientIdNumber(clientIdNumber);
     }
+
+    @Override
+    public Mono<Account> nativeAccountUpdate(Account account) {
+        return accountRepository.save(account);
+    }
 }

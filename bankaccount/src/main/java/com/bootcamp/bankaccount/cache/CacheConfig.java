@@ -1,4 +1,4 @@
-package com.bootcamp.bankaccount.chache;
+package com.bootcamp.bankaccount.cache;
 
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;

@@ -9,6 +9,20 @@ spring:
   profiles:
     active: dev
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      #value
+      #group-id: yanki
+      #key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      #properties:
+      # spring:
+      #  json:
+      #   trusted:
+      #    packages: "*"
+      auto-offset-reset: earliest
+
 #  cache:
 #    type: redis
 #  redis:

@@ -25,4 +25,6 @@ public interface AccountService {
     Mono<Account> findByAccountNumber(String accountNumber);
 
     Flux<Account> getAccountByClientId(String clientId);
+
+    Mono<Account> nativeAccountUpdate (Account account);
 }
