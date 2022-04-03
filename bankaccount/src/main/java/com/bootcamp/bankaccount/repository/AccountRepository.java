@@ -1,6 +1,6 @@
 package com.bootcamp.bankaccount.repository;
 
-import com.bootcamp.bankaccount.models.bean.Account;
+import com.bootcamp.bankaccount.handlers.bean.Account;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;

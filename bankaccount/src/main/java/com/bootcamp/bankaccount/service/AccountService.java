@@ -1,6 +1,6 @@
 package com.bootcamp.bankaccount.service;
 
-import com.bootcamp.bankaccount.models.bean.Account;
+import com.bootcamp.bankaccount.handlers.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,4 +24,6 @@ public interface AccountService {
     Mono<Account> findByAccountNumber(String accountNumber);
 
     Flux<Account> getAccountByClientId(String clientId);
+
+    Mono<Account> nativeAccountUpdate (Account account);
 }

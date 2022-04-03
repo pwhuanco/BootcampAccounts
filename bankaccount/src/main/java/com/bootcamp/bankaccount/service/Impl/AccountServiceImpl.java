@@ -1,6 +1,6 @@
 package com.bootcamp.bankaccount.service.Impl;
 
-import com.bootcamp.bankaccount.models.bean.Account;
+import com.bootcamp.bankaccount.handlers.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
 import com.bootcamp.bankaccount.models.dto.CreditCardDto;
@@ -130,5 +130,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Flux<Account> getAccountByClientId(String clientIdNumber) {
         return accountRepository.findByClientIdNumber(clientIdNumber);
+    }
+
+    @Override
+    public Mono<Account> nativeAccountUpdate(Account account) {
+        return accountRepository.save(account);
     }
 }

@@ -1,6 +1,6 @@
 package com.bootcamp.bankaccount.service;
 
-import com.bootcamp.bankaccount.models.bean.Account;
+import com.bootcamp.bankaccount.handlers.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
 import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.bootcamp.bankaccount.repository.AccountRepository;

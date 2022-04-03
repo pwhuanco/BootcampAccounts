@@ -1,4 +1,4 @@
-package com.bootcamp.bankaccount.models.bean;
+package com.bootcamp.bankaccount.handlers.bean;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

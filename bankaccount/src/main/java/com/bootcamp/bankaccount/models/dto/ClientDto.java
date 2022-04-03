@@ -1,6 +1,6 @@
 package com.bootcamp.bankaccount.models.dto;
 
-import com.bootcamp.bankaccount.models.bean.ClientType;
+import com.bootcamp.bankaccount.handlers.bean.ClientType;
 import lombok.*;
 
 @Getter

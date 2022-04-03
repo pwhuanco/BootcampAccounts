@@ -15,13 +15,13 @@ public class Constants {
   public static final String SAVING_ACCOUNT = "SAVING_ACCOUNT";
 
   public static final String MSJ_MONTO_MENOR_APERTURA
-          = "Cliente no se registró porque el monto inicial " +
-          "no es mayor a el mínimo de apertura";
+          = "Cliente no se registrï¿½ porque el monto inicial " +
+          "no es mayor a el mï¿½nimo de apertura";
   public static final String MSJ_REQUIERE_TC
-          = "Cliente no se registró porque según el tipo de " +
-          "producto requiere tener una tarjeta de crédito";
+          = "Cliente no se registrï¿½ porque segï¿½n el tipo de " +
+          "producto requiere tener una tarjeta de crï¿½dito";
 
 
-    public static final String TIPO_CLIENTE_PERSONA = "1";
-    public static final String TIPO_CLIENTE_EMPRESA = "2";
+    //public static final String TIPO_CLIENTE_PERSONA = "1";
+    //public static final String TIPO_CLIENTE_EMPRESA = "2";
 }

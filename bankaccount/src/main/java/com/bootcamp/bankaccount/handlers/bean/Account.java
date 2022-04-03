@@ -1,4 +1,4 @@
-package com.bootcamp.bankaccount.models.bean;
+package com.bootcamp.bankaccount.handlers.bean;
 
 import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.fasterxml.jackson.annotation.JsonFormat;

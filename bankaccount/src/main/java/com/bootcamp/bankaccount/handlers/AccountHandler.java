@@ -5,6 +5,7 @@ import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.bootcamp.bankaccount.service.AccountService;
 import com.bootcamp.bankaccount.service.ClientService;
 import com.bootcamp.bankaccount.service.CreditService;
+import com.bootcamp.bankaccount.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class AccountHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(AccountHandler.class);
     @Autowired
     private AccountService accountService;
 

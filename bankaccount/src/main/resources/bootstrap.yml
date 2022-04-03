@@ -1,13 +1,26 @@
 spring:
   application:
-    name: bankaccounts-microservice
+    name: bankaccounts-microservice-four
   cloud:
     config:
       uri: http://localhost:8081
       username: develop
       password: develop
-  profiles:
-    active: dev
+  #profiles:
+   # active: dev
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      #value
+      #group-id: yanki
+      #key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      #properties:
+       # spring:
+        #  json:
+         #   trusted:
+          #    packages: "*"
+      auto-offset-reset: earliest
 #  mvc:
 #    pathmatch:
 #      matching-strategy: ant_path_matcher
