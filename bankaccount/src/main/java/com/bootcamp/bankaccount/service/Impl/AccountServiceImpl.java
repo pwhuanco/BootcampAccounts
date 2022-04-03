@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
@@ -44,6 +45,7 @@ public class AccountServiceImpl implements AccountService {
     @Value("${apiclient.uri}")
     private String urlApigateway;
 
+    @Cacheable(value = "accountsCache")
     public Flux<AccountDto> getAccounts() {
         return accountRepository.findAll().map(AppUtils::entityToDto);
     }
@@ -51,6 +53,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Mono<AccountDto> getAccountById(String id) {
         return accountRepository.findById(id).map(AppUtils::entityToDto);
+    }
+    @Cacheable(value = "accountCache")
+    @Override
+    public AccountDto getAccountByIdNo(String id) {
+        return new AccountDto();
+        //return accountRepository.findById(id).map(AppUtils::entityToDto).block();
     }
 
     @Override

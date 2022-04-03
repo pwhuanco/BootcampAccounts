@@ -2,14 +2,18 @@ package com.bootcamp.bankaccount.models.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountDto {
+public class AccountDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String id;
 
     private String accountNumber;
@@ -22,7 +26,7 @@ public class AccountDto {
 
     private String canBeDeposit;
 
-    private LocalDateTime operationDate = LocalDateTime.now();
+    //private LocalDateTime operationDate = LocalDateTime.now(ZoneId.of("America/Lima"));
 
     private ClientCommand client;
 

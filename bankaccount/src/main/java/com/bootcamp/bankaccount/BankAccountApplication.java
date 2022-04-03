@@ -3,6 +3,7 @@ package com.bootcamp.bankaccount;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import static com.bootcamp.bankaccount.util.Constants.API_CLIENT_URL;
 
 @EnableEurekaClient
 @SpringBootApplication
+@EnableCaching
 public class BankAccountApplication {
 
     @Bean

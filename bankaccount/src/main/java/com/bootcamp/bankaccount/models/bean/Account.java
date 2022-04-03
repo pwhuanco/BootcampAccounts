@@ -54,7 +54,19 @@ public class Account {
 
     private int maxLimitTransaction;
 
-
-
-
+    public Account(String id, String accountNumber, double balance, String currency, String accountType, String canBeDeposit, ClientCommand client, int movementPerMonth, int maxLimitMovementPerMonth, String clientIdNumber, Double minimumOpeningAmount, Double minimumDailyAverageAmountEachMonth, int maxLimitTransaction) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.currency = currency;
+        this.accountType = accountType;
+        this.canBeDeposit = canBeDeposit;
+        this.client = client;
+        this.movementPerMonth = movementPerMonth;
+        this.maxLimitMovementPerMonth = maxLimitMovementPerMonth;
+        this.clientIdNumber = clientIdNumber;
+        this.minimumOpeningAmount = minimumOpeningAmount;
+        this.minimumDailyAverageAmountEachMonth = minimumDailyAverageAmountEachMonth;
+        this.maxLimitTransaction = maxLimitTransaction;
+    }
 }

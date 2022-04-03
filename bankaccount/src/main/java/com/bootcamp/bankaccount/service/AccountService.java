@@ -9,6 +9,7 @@ public interface AccountService {
 
     Flux<AccountDto> getAccounts();
 
+    AccountDto getAccountByIdNo(String id);
     Mono<AccountDto> getAccountById(String id);
 
     Mono<AccountDto> saveAccount(AccountDto accountDtoMono);

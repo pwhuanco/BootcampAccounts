@@ -8,9 +8,12 @@ spring:
       password: develop
   profiles:
     active: dev
-#  mvc:
-#    pathmatch:
-#      matching-strategy: ant_path_matcher
+
+#  cache:
+#    type: redis
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
 
 
 
