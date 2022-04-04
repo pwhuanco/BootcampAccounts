@@ -2,6 +2,7 @@ package com.bootcamp.bankaccount.service.Impl;
 
 import com.bootcamp.bankaccount.models.bean.Account;
 import com.bootcamp.bankaccount.models.dto.AccountDto;
+import com.bootcamp.bankaccount.models.dto.ClientCommand;
 import com.bootcamp.bankaccount.models.dto.ClientDto;
 import com.bootcamp.bankaccount.models.dto.CreditCardDto;
 import com.bootcamp.bankaccount.repository.AccountRepository;
@@ -45,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
     @Value("${apiclient.uri}")
     private String urlApigateway;
 
-    @Cacheable(value = "accountsCache")
+    //@Cacheable(value = "accountsCache")
     public Flux<AccountDto> getAccounts() {
         return accountRepository.findAll().map(AppUtils::entityToDto);
     }
@@ -57,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
     @Cacheable(value = "accountCache")
     @Override
     public AccountDto getAccountByIdNo(String id) {
-        return new AccountDto();
+        return new AccountDto("22575230","12345",123.00,"USD","1","1", ClientCommand.builder().build(),0,3,"007", 200.00, 50.00, 10);
         //return accountRepository.findById(id).map(AppUtils::entityToDto).block();
     }
 
