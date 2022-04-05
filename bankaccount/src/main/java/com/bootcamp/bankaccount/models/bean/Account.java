@@ -54,6 +54,11 @@ public class Account {
 
     private int maxLimitTransaction;
 
+    /**
+     * associatedCard: tarjeta asociada a la cuenta
+     */
+    private String associatedCard;
+
     public Account(String id, String accountNumber, double balance, String currency, String accountType, String canBeDeposit, ClientCommand client, int movementPerMonth, int maxLimitMovementPerMonth, String clientIdNumber, Double minimumOpeningAmount, Double minimumDailyAverageAmountEachMonth, int maxLimitTransaction) {
         this.id = id;
         this.accountNumber = accountNumber;

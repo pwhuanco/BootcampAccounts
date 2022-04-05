@@ -42,6 +42,6 @@ public class AccountDto implements Serializable {
 
     private int maxLimitTransaction;
 
-
+    private String associatedAccount;
 
 }
