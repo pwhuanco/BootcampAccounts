@@ -29,7 +29,7 @@ public class Account {
 
     private String accountNumber;
 
-    private double balance;
+    private Double balance;
 
     private String currency;
 

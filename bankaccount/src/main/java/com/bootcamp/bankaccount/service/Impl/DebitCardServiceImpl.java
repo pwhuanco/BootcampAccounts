@@ -52,10 +52,16 @@ public class DebitCardServiceImpl implements DebitCardService {
         return debitRepository.findById(id).map(AppUtils::entityDebitToDto);
     }
 
+    /**
+     * "Los clientes ahora pueden tener tarjetas de debito asociado a sus cuentas bancarias"
+     *
+     * @param debitDtoMono
+     * @return
+     */
     @Override
     public Mono<DebitCardDto> saveDebitCard(Mono<DebitCardDto> debitDtoMono) {
 
-        return debitDtoMono.flatMap(d ->debitRepository.save(AppUtils.dtoToEntityDebit(d)).map(AppUtils::entityDebitToDto))
+        return debitDtoMono.flatMap(d -> debitRepository.save(AppUtils.dtoToEntityDebit(d)).map(AppUtils::entityDebitToDto))
                 ;
         /*if (StringUtils.equals(accountDto.getAccountType(), Constants.VIP)
                 || StringUtils.equals(accountDto.getAccountType(), Constants.PYME)) {
@@ -106,12 +112,33 @@ public class DebitCardServiceImpl implements DebitCardService {
         return clientDto;
     }
 
+    /**
+     * "Toda tarjeta de débito tiene asociada una cuenta principal"
+     *
+     * @param debitCard
+     * @param account
+     * @return DebitCardDto con la cuenta principal configurada
+     */
     @Override
     public Mono<DebitCardDto> setPrincipalAccount(String debitCard, String account) {
         return debitRepository.findByNumber(debitCard)
                 .doOnNext(card -> card.setPrincipalAccount(account))
                 .flatMap(debitRepository::save)
                 .map(AppUtils::entityDebitToDto);
+    }
+
+    /**
+     * "Consultar el saldo de la cuenta principal asociada a la tarjeta de débito"
+     *
+     * @param debitNumber
+     * @return balance de la cuenta principal
+     */
+    @Override
+    public Mono<Double> getBalancePrincipalAccount(String debitNumber) {
+        LOGGER.debug("getBalancePrincipalAccount:"+debitNumber);
+        return debitRepository.findByNumber(debitNumber)
+                .flatMap(card -> accountRepository.findByAccountNumber(card.getPrincipalAccount()))
+                .map(account -> account.getBalance()).doOnNext(b->LOGGER.debug("--getBalance:"+b));
     }
 
     public Mono<Void> deleteDebitCard(String id) {

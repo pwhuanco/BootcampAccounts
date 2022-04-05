@@ -19,4 +19,6 @@ public interface DebitCardService {
     public Mono<Void> deleteDebitCard(String id);
     Mono<DebitCardDto> getById(String id);
     Mono<DebitCardDto> setPrincipalAccount(String debitCard, String account);
+
+    Mono<Double> getBalancePrincipalAccount(String debitNumber);
 }

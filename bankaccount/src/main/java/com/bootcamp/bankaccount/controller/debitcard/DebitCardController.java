@@ -36,4 +36,10 @@ public class DebitCardController {
 
         return debitCardService.setPrincipalAccount(card, account);
     }
+
+    @GetMapping("/principal/balance/{debitNumber}")
+    public Mono<Double> getBalancePrincipalAccount(@PathVariable String debitNumber){
+
+        return debitCardService.getBalancePrincipalAccount(debitNumber);
+    }
 }
